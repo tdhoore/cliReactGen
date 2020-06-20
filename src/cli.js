@@ -41,14 +41,20 @@ async function prompForMissingOptions(options) {
     questions.push({
       type: "input",
       name: "name",
-      message: "Please give a name for your comp",
+      message: "Please give a name",
       default: "unTittled",
     });
   }
 
+  //get answers from first questions
+  const answers = await inquirer.prompt(questions);
+
+  //get answers based on chosen tasks
+  const specialQuestions = [];
+
   //check if task is create project and git is set
-  if (options.task === tasks[0] && !options.git) {
-    questions.push({
+  if (answers.task === tasks[0] && !options.git) {
+    specialQuestions.push({
       type: "confirm",
       name: "git",
       message: "Init git?",
@@ -56,13 +62,14 @@ async function prompForMissingOptions(options) {
     });
   }
 
-  const answers = await inquirer.prompt(questions);
+  //ask the questions
+  const specialAnswer = await inquirer.prompt(specialQuestions);
 
   return {
     ...options,
     task: options.task || answers.task,
     name: options.name || answers.name,
-    git: options.git || answers.git,
+    git: options.git || specialAnswer.git,
   };
 }
 
