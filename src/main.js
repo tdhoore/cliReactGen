@@ -23,6 +23,9 @@ export async function createFiles(options) {
     targetDirectory: options.targetDirectory || process.cwd(),
   };
 
+  //add directory path to targetDirectory
+  options.targetDirectory += `\\${options.name}\\`;
+
   //set templateDirectory
   const templateDir = path.resolve(
     new URL(__filename).pathname,
