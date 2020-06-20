@@ -1,5 +1,6 @@
 import arg from "arg";
 import inquirer from "inquirer";
+import { createFiles } from "./main";
 
 const tasks = ["create-project", "comp"];
 
@@ -79,5 +80,5 @@ export async function cli(args) {
   //give prompts if needed
   options = await prompForMissingOptions(options);
 
-  console.log(options);
+  await createFiles(options);
 }
