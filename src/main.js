@@ -13,6 +13,10 @@ async function copyTemplateFiles(options) {
   });
 }
 
+async function renameFiles(options) {
+  console.log(options);
+}
+
 export async function createFiles(options) {
   options = {
     ...options,
@@ -37,7 +41,9 @@ export async function createFiles(options) {
 
   //move the files over
   console.log("creating files");
-  await copyTemplateFiles(options);
+  await copyTemplateFiles(options).then(() => {
+    renameFiles(options);
+  });
 
   console.log("%s Files Ready", chalk.green.bold("DONE"));
   return true;
