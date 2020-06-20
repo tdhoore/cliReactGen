@@ -1,0 +1,25 @@
+{
+  "name": "reactProjectBuilder",
+  "version": "1.0.0",
+  "description": "generate usefull react files",
+  "main": "src/index.js",
+  "bin": {
+    "reactGen": "bin/react-gen"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "arg": "^4.1.3",
+    "esm": "^3.2.25",
+    "inquirer": "^7.2.0"
+  }
+}
