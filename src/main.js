@@ -1,20 +1,52 @@
 import chalk from "chalk";
 import fs from "fs";
-import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
 
+const templateNameReplace = "!!TemplateName!!";
 const access = promisify(fs.access);
-const copy = promisify(ncp);
 
 async function copyTemplateFiles(options) {
-  return copy(options.templateDirectory, options.targetDirectory, {
-    clobber: false,
-  });
-}
+  //read all the files in the dir
+  fs.readdir(options.templateDirectory, (err, files) => {
+    if (err) {
+      return console.log(err, chalk.red.bold("ERROR"));
+    }
 
-async function renameFiles(options) {
-  console.log(options);
+    files.forEach((file) => {
+      //read the file
+      fs.readFile(
+        `${options.templateDirectory}\\${file}`,
+        "utf8",
+        (err, data) => {
+          if (err) {
+            return console.log(err, chalk.red.bold("ERROR"));
+          }
+
+          //replace template text
+          const result = data.replace(templateNameReplace, options.name);
+
+          //check if dir exists if not create it
+          if (!fs.existsSync(options.targetDirectory)) {
+            fs.mkdirSync(options.targetDirectory);
+          } else {
+            return console.log(chalk.red.bold("ERROR"), "files already exists");
+          }
+
+          fs.writeFile(
+            `${options.targetDirectory}${file}`,
+            result,
+            "utf8",
+            (err) => {
+              if (err) {
+                return console.log(err, chalk.red.bold("ERROR"));
+              }
+            }
+          );
+        }
+      );
+    });
+  });
 }
 
 export async function createFiles(options) {
@@ -44,9 +76,7 @@ export async function createFiles(options) {
 
   //move the files over
   console.log("creating files");
-  await copyTemplateFiles(options).then(() => {
-    renameFiles(options);
-  });
+  await copyTemplateFiles(options);
 
   console.log("%s Files Ready", chalk.green.bold("DONE"));
   return true;
