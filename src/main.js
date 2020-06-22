@@ -1,13 +1,68 @@
 import chalk from "chalk";
 import fs from "fs";
+import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
+const replace = require("replace-in-file");
 
 const templateNameReplace = "templatename";
 const access = promisify(fs.access);
+const copy = promisify(ncp);
 
 async function copyTemplateFiles(options) {
-  //read all the files in the dir
+  return copy(options.templateDirectory, options.targetDirectory).then(() => {
+    //change names
+    console.log(options.targetDirectory);
+
+    const replaceOptions = {
+      files: [
+        `${options.targetDirectory}**/*`,
+        `${options.targetDirectory}**/**/*`,
+      ],
+      from: new RegExp(templateNameReplace, "g"),
+      to: options.name,
+    };
+
+    //replace the templatename inside the files
+    replace(replaceOptions)
+      .then((results) => {
+        //console.log("Replacement results:", results);
+
+        results.forEach((result) => {
+          const fileName = result.file.substring(
+            result.file.lastIndexOf("/"),
+            result.file.length
+          );
+          const folderName = result.file.substring(
+            0,
+            result.file.lastIndexOf("/")
+          );
+
+          if (fileName.includes(templateNameReplace)) {
+            fs.rename(
+              result.file,
+              `${folderName}${fileName.replace(
+                new RegExp(templateNameReplace, "g"),
+                options.name
+              )}`,
+              (err) => {
+                if (err) {
+                  return console.log(chalk.red.bold("ERROR"), err);
+                }
+              }
+            );
+          }
+
+          //replace the name of the file
+          /**/
+        });
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+      });
+  });
+
+  /*//read all the files in the dir
   fs.readdir(options.templateDirectory, (err, files) => {
     if (err) {
       return console.log(err, chalk.red.bold("ERROR"));
@@ -64,7 +119,7 @@ async function copyTemplateFiles(options) {
         }
       );
     });
-  });
+  });*/
 }
 
 export async function createFiles(options) {
