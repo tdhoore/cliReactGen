@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { promisify } from "util";
 
-const templateNameReplace = "!!TemplateName!!";
+const templateNameReplace = "templateName";
 const access = promisify(fs.access);
 
 async function copyTemplateFiles(options) {
@@ -24,7 +24,10 @@ async function copyTemplateFiles(options) {
           }
 
           //replace template text
-          const result = data.replace(templateNameReplace, options.name);
+          const result = data.replace(
+            new RegExp(templateNameReplace, "g"),
+            options.name
+          );
 
           //check if dir exists if not create it
           if (!fs.existsSync(options.targetDirectory)) {
@@ -33,6 +36,7 @@ async function copyTemplateFiles(options) {
             return console.log(chalk.red.bold("ERROR"), "files already exists");
           }
 
+          //update the content of the file
           fs.writeFile(
             `${options.targetDirectory}${file}`,
             result,
@@ -40,6 +44,20 @@ async function copyTemplateFiles(options) {
             (err) => {
               if (err) {
                 return console.log(err, chalk.red.bold("ERROR"));
+              }
+            }
+          );
+
+          //update the title of the sile itself
+          fs.rename(
+            `${options.targetDirectory}${file}`,
+            `${options.targetDirectory}${file.replace(
+              new RegExp(templateNameReplace, "g"),
+              options.name
+            )}`,
+            (err) => {
+              if (err) {
+                return console.log(chalk.red.bold("ERROR"), err);
               }
             }
           );
