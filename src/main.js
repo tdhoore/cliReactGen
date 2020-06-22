@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { promisify } from "util";
 
-const templateNameReplace = "templateName";
+const templateNameReplace = "templatename";
 const access = promisify(fs.access);
 
 async function copyTemplateFiles(options) {
