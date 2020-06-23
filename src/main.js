@@ -4,6 +4,9 @@ import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
 const replace = require("replace-in-file");
+import execa from "execa";
+import Listr from "listr";
+import { projectInstall } from "pkg-install";
 
 const templateNameReplace = "templatename";
 const access = promisify(fs.access);
@@ -60,6 +63,18 @@ async function copyTemplateFiles(options) {
   });
 }
 
+async function initGit(options) {
+  const result = await execa("git", ["init"], {
+    cwd: options.targetDirectory,
+  });
+
+  if (result.failed) {
+    return Promise.reject(new Error("Failed to initialize Git"));
+  }
+
+  return;
+}
+
 export async function createFiles(options) {
   options = {
     ...options,
@@ -86,8 +101,35 @@ export async function createFiles(options) {
   }
 
   //move the files over
-  console.log("creating files");
-  await copyTemplateFiles(options);
+  //console.log("creating files");
+  //await copyTemplateFiles(options);
+
+  //complete tasks
+  const tasks = new Listr([
+    {
+      title: "Copy files",
+      task: () => copyTemplateFiles(options),
+    },
+    {
+      title: "initialize Git",
+      task: () => initGit(options),
+      enable: () => options.git,
+    },
+    {
+      title: "Install dependecies",
+      task: () =>
+        projectInstall({
+          cwd: options.targetDirectory,
+        }),
+      skip: () =>
+        !options.runInstall
+          ? "Pass --install to automaticly install"
+          : undefined,
+    },
+  ]);
+
+  //run tasks
+  await tasks.run();
 
   console.log("%s Files Ready", chalk.green.bold("DONE"));
   return true;

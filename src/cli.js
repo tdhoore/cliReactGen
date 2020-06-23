@@ -63,6 +63,16 @@ async function prompForMissingOptions(options) {
     });
   }
 
+  //check if task is create project and install is set
+  if (answers.task === tasks[0] && !options.runInstall) {
+    specialQuestions.push({
+      type: "confirm",
+      name: "runInstall",
+      message: "Install dependecies",
+      default: false,
+    });
+  }
+
   //ask the questions
   const specialAnswer = await inquirer.prompt(specialQuestions);
 
@@ -71,6 +81,7 @@ async function prompForMissingOptions(options) {
     task: options.task || answers.task,
     name: options.name || answers.name,
     git: options.git || specialAnswer.git,
+    runInstall: options.runInstall || specialAnswer.runInstall,
   };
 }
 
