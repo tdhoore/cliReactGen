@@ -1,5 +1,5 @@
 {
-  "name": "cliReactGen",
+  "name": "cli-react-gen",
   "version": "1.0.0",
   "description": "generate usefull react files",
   "main": "src/index.js",
