@@ -15,15 +15,23 @@ const copy = promisify(ncp);
 async function copyTemplateFiles(options) {
   return copy(options.templateDirectory, options.targetDirectory).then(() => {
     //change names
-    console.log(options);
-
     const replaceOptions = {
       files: [
         `${options.targetDirectory}**/*`,
         `${options.targetDirectory}**/**/*`,
       ],
-      from: new RegExp(templateNameReplace, "g"),
-      to: options.name,
+      from: [
+        new RegExp(
+          templateNameReplace.charAt(0).toUpperCase() +
+            templateNameReplace.slice(1),
+          "g"
+        ),
+        new RegExp(templateNameReplace, "g"),
+      ],
+      to: [
+        options.name.charAt(0).toUpperCase() + options.name.slice(1),
+        options.name,
+      ],
     };
 
     //replace the templatename inside the files
@@ -42,11 +50,35 @@ async function copyTemplateFiles(options) {
           );
 
           if (fileName.includes(templateNameReplace)) {
+            //rename lowercase
             fs.rename(
               result.file,
               `${folderName}${fileName.replace(
                 new RegExp(templateNameReplace, "g"),
                 options.name
+              )}`,
+              (err) => {
+                if (err) {
+                  //return console.log(chalk.red.bold("ERROR"), err);
+                }
+              }
+            );
+          } else if (
+            fileName.includes(
+              templateNameReplace.charAt(0).toUpperCase() +
+                templateNameReplace.slice(1)
+            )
+          ) {
+            //rename upper case
+            fs.rename(
+              result.file,
+              `${folderName}${fileName.replace(
+                new RegExp(
+                  templateNameReplace.charAt(0).toUpperCase() +
+                    templateNameReplace.slice(1),
+                  "g"
+                ),
+                options.name.charAt(0).toUpperCase() + options.name.slice(1)
               )}`,
               (err) => {
                 if (err) {

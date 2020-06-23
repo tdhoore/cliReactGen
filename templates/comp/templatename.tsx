@@ -1,8 +1,8 @@
 import React from "react";
 import { props } from "./types";
 
-const templatename = (props: props) => {
-  <div></div>;
+const Templatename = (props: props) => {
+  return <div></div>;
 };
 
-export default templatename;
+export default Templatename;
