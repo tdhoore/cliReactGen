@@ -1,4 +1,4 @@
-import { store } from "../redux/configureStore";
+import { store } from "../../redux/configureStore";
 //import {} from "./templatenameActions";
 
 /*export const func = () => {

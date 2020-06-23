@@ -15,7 +15,7 @@ const copy = promisify(ncp);
 async function copyTemplateFiles(options) {
   return copy(options.templateDirectory, options.targetDirectory).then(() => {
     //change names
-    console.log(options.targetDirectory);
+    console.log(options);
 
     const replaceOptions = {
       files: [
@@ -100,10 +100,6 @@ export async function createFiles(options) {
     process.exit(1);
   }
 
-  //move the files over
-  //console.log("creating files");
-  //await copyTemplateFiles(options);
-
   //complete tasks
   const tasks = new Listr([
     {
@@ -114,6 +110,7 @@ export async function createFiles(options) {
       title: "initialize Git",
       task: () => initGit(options),
       enable: () => options.git,
+      skip: () => !options.git,
     },
     {
       title: "Install dependecies",
