@@ -1,10 +1,10 @@
-import templatename from "./templatename";
+import Templatename from "./Templatename";
 import templatenameReducer from "./templatenameReducer";
 import * as types from "./types";
 
 const templatenameComp = {
   components: {
-    templatename,
+    Templatename,
     templatenameReducer,
   },
   types,
