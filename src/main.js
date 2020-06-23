@@ -47,79 +47,17 @@ async function copyTemplateFiles(options) {
               )}`,
               (err) => {
                 if (err) {
-                  return console.log(chalk.red.bold("ERROR"), err);
+                  //return console.log(chalk.red.bold("ERROR"), err);
                 }
               }
             );
           }
-
-          //replace the name of the file
-          /**/
         });
       })
       .catch((error) => {
         console.error("Error occurred:", error);
       });
   });
-
-  /*//read all the files in the dir
-  fs.readdir(options.templateDirectory, (err, files) => {
-    if (err) {
-      return console.log(err, chalk.red.bold("ERROR"));
-    }
-
-    files.forEach((file) => {
-      //read the file
-      fs.readFile(
-        `${options.templateDirectory}\\${file}`,
-        "utf8",
-        (err, data) => {
-          if (err) {
-            return console.log(err, chalk.red.bold("ERROR"));
-          }
-
-          //replace template text
-          const result = data.replace(
-            new RegExp(templateNameReplace, "g"),
-            options.name
-          );
-
-          //check if dir exists if not create it
-          if (!fs.existsSync(options.targetDirectory)) {
-            fs.mkdirSync(options.targetDirectory);
-          } else {
-            return console.log(chalk.red.bold("ERROR"), "files already exists");
-          }
-
-          //update the content of the file
-          fs.writeFile(
-            `${options.targetDirectory}${file}`,
-            result,
-            "utf8",
-            (err) => {
-              if (err) {
-                return console.log(err, chalk.red.bold("ERROR"));
-              }
-            }
-          );
-
-          //update the title of the sile itself
-          fs.rename(
-            `${options.targetDirectory}${file}`,
-            `${options.targetDirectory}${file.replace(
-              new RegExp(templateNameReplace, "g"),
-              options.name
-            )}`,
-            (err) => {
-              if (err) {
-                return console.log(chalk.red.bold("ERROR"), err);
-              }
-            }
-          );
-        }
-      );
-    });
-  });*/
 }
 
 export async function createFiles(options) {
