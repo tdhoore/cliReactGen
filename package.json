@@ -1,6 +1,6 @@
 {
   "name": "cli-react-gen",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "generate usefull react files",
   "main": "src/index.js",
   "bin": {
@@ -28,7 +28,7 @@
     "inquirer": "^7.2.0",
     "listr": "^0.14.3",
     "ncp": "^2.0.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^5.0.0",
     "pkg-install": "^1.0.0",
     "react-redux": "^7.2.0",
     "react-router": "^5.2.0",

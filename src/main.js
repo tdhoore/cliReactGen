@@ -59,7 +59,7 @@ async function copyTemplateFiles(options) {
               )}`,
               (err) => {
                 if (err) {
-                  //return console.log(chalk.red.bold("ERROR"), err);
+                  return console.log(chalk.red.bold("ERROR"), err);
                 }
               }
             );
@@ -82,7 +82,7 @@ async function copyTemplateFiles(options) {
               )}`,
               (err) => {
                 if (err) {
-                  //return console.log(chalk.red.bold("ERROR"), err);
+                  return console.log(chalk.red.bold("ERROR"), err);
                 }
               }
             );
